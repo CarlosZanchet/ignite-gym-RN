@@ -6,12 +6,32 @@ import { Button } from "@components/Button";
 import { Platform } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { AuthNavigatorRoutesProps } from "@routes/auth.routes";
+import { Controller, useForm } from "react-hook-form";
+import { useAuth } from "@hooks/useAuth";
+import { useState } from "react";
+
+interface FormData {
+  email: string;
+  password: string;
+}
 
 export function SignIn() {
   const navigate = useNavigation<AuthNavigatorRoutesProps>()
+  const { signIn } = useAuth()
+  const { control, handleSubmit, formState: { errors } } = useForm<FormData>()
+
+  const [isLoading, setIsLoading] = useState(false)
 
   function handleNewAccount() {
     navigate.navigate('signUp')
+  }
+
+  async function handleSignIn({ email, password }: FormData) {
+    setIsLoading(true)
+    signIn(email, password)
+    .finally(() => {
+      setIsLoading(false)
+    })
   }
   
   return (
@@ -39,17 +59,41 @@ export function SignIn() {
           <Heading color="gray.100" fontFamily="heading" fontSize="xl" mb={6}>
             Acesse sua conta
           </Heading>
-          <Input 
-            placeholder="E-mail" 
-            keyboardType="email-address" 
-            autoCapitalize="none"
-          />
-          <Input 
-            placeholder="Senha" 
-            secureTextEntry
+
+          <Controller 
+            name="email"
+            control={control}
+            rules={{ required: 'Informe o e-mail '}}
+            render={({ field: { onChange } }) => (
+              <Input 
+                placeholder="E-mail" 
+                keyboardType="email-address" 
+                autoCapitalize="none"
+                onChangeText={onChange}
+                errorMessage={errors.email?.message}
+              />
+            )}
           />
 
-          <Button title="Acessar" />
+          <Controller 
+            name="password"
+            control={control}
+            rules={{ required: 'Informe a senha '}}
+            render={({ field: { onChange } }) => (
+              <Input 
+                placeholder="Senha" 
+                onChangeText={onChange}
+                secureTextEntry
+                errorMessage={errors.password?.message}
+              />
+            )}
+          />
+
+          <Button 
+            title="Acessar" 
+            onPress={handleSubmit(handleSignIn)} 
+            isLoading={isLoading}
+          />
         </Center>
 
         <Center mt={24}>

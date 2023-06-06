@@ -11,6 +11,8 @@ import { useNavigation } from "@react-navigation/native";
 import { api } from "@services/api";
 import axios from "axios";
 import { AppError } from "@utils/AppError";
+import { useState } from "react";
+import { useAuth } from "@hooks/useAuth";
 
 interface FormDataProps {
   name: string
@@ -27,6 +29,9 @@ const signUpSchema = yup.object({
 })
 
 export function SignUp() {
+  const { signIn } = useAuth()
+  const [isLoading, setIsLoading] = useState(false)
+
   const toast = useToast()
   const { control, handleSubmit, formState: { errors } } = useForm<FormDataProps>({
     resolver: yupResolver(signUpSchema)
@@ -38,9 +43,10 @@ export function SignUp() {
   }
 
    async function handleSignUp({ name, email, password }: FormDataProps) {
+    setIsLoading(true)
      api.post('/users', { name, email, password})
-      .then((response) => {
-        console.log(response.data)
+      .then(() => {
+        signIn(email, password)
       })
       .catch(err => {
         const isAppError = err instanceof AppError
@@ -49,6 +55,9 @@ export function SignUp() {
           title,
           bgColor: 'red.500'
         })
+      })
+      .finally(() => {
+        setIsLoading(false)
       })
   }
 
@@ -136,7 +145,7 @@ export function SignUp() {
             )}
           />
 
-          <Button title="Criar e acessar" onPress={handleSubmit(handleSignUp)} />
+          <Button title="Criar e acessar" onPress={handleSubmit(handleSignUp)} isLoading={isLoading}/>
         </Center>
 
         <Button 

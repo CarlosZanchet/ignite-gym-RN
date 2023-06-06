@@ -69,7 +69,6 @@ export function Profile() {
                 />
               :
                 <UserPhoto 
-                  source={{ uri: userPhoto }}
                   alt="Foto do usuario"
                   size={PHOTO_SIZE}
                 />
