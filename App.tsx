@@ -4,6 +4,7 @@ import { Platform, StatusBar } from 'react-native';
 import { Loading } from '@components/Loading';
 import { THEME } from './src/theme';
 import { Routes } from '@routes/index';
+import { AuthContext, AuthContextProvider } from 'src/context/AuthContext';
 
 export default function App() {5
 
@@ -16,7 +17,9 @@ export default function App() {5
         translucent 
         backgroundColor="transparent" 
       />
-      {fontsLoaded ? <Routes /> : <Loading /> }
+      <AuthContextProvider>
+        {fontsLoaded ? <Routes /> : <Loading /> }
+      </AuthContextProvider>
     </NativeBaseProvider>
   );
 }
