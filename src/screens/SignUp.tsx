@@ -9,7 +9,6 @@ import { Button } from "@components/Button";
 import { Platform } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { api } from "@services/api";
-import axios from "axios";
 import { AppError } from "@utils/AppError";
 import { useState } from "react";
 import { useAuth } from "@hooks/useAuth";
@@ -73,9 +72,10 @@ export function SignUp() {
           alt="pessoas treinando"
           resizeMode="contain"
           position="absolute" 
+          opacity={0.3}
         />
 
-        <Center my={24}>
+        <Center my={20}>
           <LogoSvg />
           <Text color="gray.100" fontSize="sm">
             Treine sua mente e seu corpo
@@ -106,7 +106,7 @@ export function SignUp() {
             render={({ field: { onChange, value } }) => (
               <Input 
                 placeholder="E-mail" 
-                keyboardType="email-address" 
+                keyboardType="email-address"
                 value={value}
                 autoCapitalize="none"
                 onChangeText={onChange}
@@ -123,6 +123,7 @@ export function SignUp() {
                 placeholder="Senha" 
                 value={value}
                 secureTextEntry
+                textContentType={'oneTimeCode'}
                 onChangeText={onChange}
                 errorMessage={errors.password?.message}
               />

@@ -1,5 +1,6 @@
-import { Center, Heading, Image, Text, VStack, ScrollView } from "native-base";
+import { Center, Heading, Image, Text, VStack, ScrollView, HStack, Icon } from "native-base";
 import BackgroundImage from '@assets/background.png'
+import Logo from '@assets/logo-gym.png'
 import LogoSvg from '@assets/logo.svg'
 import { Input } from "@components/Input";
 import { Button } from "@components/Button";
@@ -9,6 +10,7 @@ import { AuthNavigatorRoutesProps } from "@routes/auth.routes";
 import { Controller, useForm } from "react-hook-form";
 import { useAuth } from "@hooks/useAuth";
 import { useState } from "react";
+import { Feather } from '@expo/vector-icons'
 
 interface FormData {
   email: string;
@@ -45,13 +47,26 @@ export function SignIn() {
           defaultSource={BackgroundImage}
           alt="pessoas treinando"
           resizeMode="contain"
-          position="absolute" 
+          position="absolute"
+          opacity={0.3} 
         />
 
         <Center my={24}>
-          <LogoSvg />
+          <HStack alignItems="center" mb={1}>
+            <Image 
+              source={Logo}
+              defaultSource={Logo}
+              alt="Logo"
+              resizeMode="contain"
+              w={14}
+              h={14}
+            />
+            <Heading fontFamily="heading" color="white" ml={1} fontSize="3xl">
+              MyGym
+            </Heading>
+          </HStack>
           <Text color="gray.100" fontSize="sm">
-            Treine sua mente e seu corpo
+            Seu guia de treino na palma da mão.
           </Text>
         </Center>
 
@@ -90,9 +105,16 @@ export function SignIn() {
           />
 
           <Button 
+            mt={1}
             title="Acessar" 
             onPress={handleSubmit(handleSignIn)} 
             isLoading={isLoading}
+            startIcon={
+              <Icon
+                as={Feather}
+                name="check"
+              />
+            }
           />
         </Center>
 
@@ -100,7 +122,17 @@ export function SignIn() {
           <Text color="gray.100" fontSize="sm" mb={3} fontFamily="body">
             Ainda não tem acesso?
           </Text>
-          <Button title="Criar Conta" variant="outline" onPress={handleNewAccount} />
+          <Button 
+            title="Criar Conta" 
+            variant="outline" 
+            onPress={handleNewAccount} 
+            startIcon={
+              <Icon
+                color="green.600"
+                as={Feather}
+                name="plus"
+              />
+            } />
         </Center>
 
       </VStack>

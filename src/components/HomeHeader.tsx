@@ -3,18 +3,26 @@ import { UserPhoto } from "./UserPhoto";
 import { MaterialIcons } from '@expo/vector-icons'
 import { TouchableOpacity } from "react-native";
 import { useAuth } from "@hooks/useAuth";
-import defaultUserImg from '@assets/userPhotoDefault.png'
+import { useNavigation } from "@react-navigation/native";
+import { AppNavigatorRoutesProps } from "@routes/app.routes";
 
 export function HomeHeader() {
   const { logout, user } = useAuth()
+  const navigate = useNavigation<AppNavigatorRoutesProps>()
+
+  function handleGoToProfile() {
+    navigate.navigate('profile')
+  }
 
   return (
     <HStack bg="gray.600" pt={16} pb={5} px={8} alignItems="center"> 
-      <UserPhoto 
-        size={16} 
-        alt="Imamgem do usuário"
-        mr={4}
-      />
+      <TouchableOpacity onPress={handleGoToProfile}>
+        <UserPhoto 
+          size={14} 
+          alt="Imagem do usuário"
+          mr={4}
+        />
+      </TouchableOpacity>
       <VStack flex={1}>
         <Text color="gray.100" fontSize="sm">
           Olá,
